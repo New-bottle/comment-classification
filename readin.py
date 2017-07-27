@@ -14,10 +14,10 @@ test_file = 'test_origin.pk1'
     ...
 ]
 '''
-def get_training_set():
+def get_training_set(filename):
     filepath = './comment_new/'
     ans = []
-    with open('example.csv', 'rb') as csvfile:
+    with open(filename, 'rb') as csvfile:
         csv_reader = csv.DictReader(csvfile)
         for row in csv_reader:
             fopen = open(filepath+row['id']+'.txt', 'r')
@@ -27,23 +27,7 @@ def get_training_set():
             ans.append([content,row['pred']])
     return ans
 
-def get_test_set():
-    filepath = './comment_new/'
-    ans = []
-    with open('training_new.csv', 'rb') as csvfile:
-        csv_reader = csv.DictReader(csvfile)
-        for row in csv_reader:
-            fopen = open(filepath+row['id']+'.txt', 'r')
-            content = ''
-            for eachLine in fopen:
-                content += eachLine
-            ans.append([content, row['pred']])
-    return ans            
-
 if __name__ == '__main__':
-    train = get_training_set()
-    test = get_test_set()
+    train = get_training_set("training_new.csv")
     with open(train_file, 'wb') as f:
         pickle.dump(train, f)
-    with open(test_file, 'wb') as f:
-        pickle.dump(test, f)
