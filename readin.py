@@ -4,8 +4,6 @@ import numpy as np
 import sys, os
 import csv
 
-train_file = 'training_origin.pk1'
-test_file = 'test_origin.pk1'
 # return a list
 '''
 [
@@ -28,6 +26,8 @@ def get_training_set(filename):
     return ans
 
 if __name__ == '__main__':
+    train_file = 'training_origin.pk1'
+    test_file = 'test_origin.pk1'
     train = get_training_set("training_new.csv")
     with open(train_file, 'wb') as f:
         pickle.dump(train, f)

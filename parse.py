@@ -3,10 +3,8 @@ import jieba
 import opencc
 
 # cc = opencc.OpenCC('mix2s')
-def parse_data(filename):
+def parse_data(ori_data):
     ans = []
-    with open(filename, 'rb') as f:
-        ori_data = pickle.load(f)
     for obj in ori_data:
         line = obj[0]
 #       print(obj[0].decode('utf8'))
@@ -17,8 +15,10 @@ def parse_data(filename):
 
 if __name__ == '__main__':
     train_ori = 'training_origin.pk1'
+    with open(train_ori, 'rb') as f:
+        ori_data = pickle.load(f)
 #   test_ori = 'test_origin.pk1'
-    train = parse_data(train_ori)
+    train = parse_data(ori_data)
     for i in train[0][0]:
         print i,
     print(train[0][1])
