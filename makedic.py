@@ -12,6 +12,7 @@ for i in range(6000):
         dic.extend(seg_list)
 
 with open('dict.txt', 'w') as f:
+    dic = list(set(dic))
     for eachword in dic:
         f.writelines(eachword.encode('utf8')+'\n')
     f.close()
