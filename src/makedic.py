@@ -1,7 +1,8 @@
 import jieba
 import pandas as pd
-train_file = "training_new.csv"
-filepath = './comment_new/'
+train_file = "../data/training_new.csv"
+filepath = '../comment_new/'
+data_path = '../data/'
 
 bag = []
 for i in range(5000,6000):
@@ -27,13 +28,13 @@ dic = list(set(cleanbag))
 
 
 # get the union-set
-with open('dict.txt', 'w') as f:
+with open(data_path + 'dict.txt', 'w') as f:
     for eachword in dic:
         f.writelines(eachword.encode('utf8')+'\n')
     f.close()
 
 pd.set_option('display.max_rows', None)
 print (pd.Series(cleanbag).value_counts())
-with open('dict_count.txt', 'w') as f:
+with open(data_path + 'dict_count.txt', 'w') as f:
     print >>f, str(pd.Series(cleanbag).value_counts())
     f.close()

@@ -2,13 +2,14 @@ from readin import *
 from parse import *
 import numpy as np
 
-train_ori = 'training_new.csv'
-train_vec = 'training_vec.pk1'
+data_path = '../data/'
+train_ori = data_path + 'training_new.csv'
+train_vec = data_path + 'training_vec.pk1'
 
 data_set = get_training_set(train_ori)
 data_set = parse_data(data_set)
 
-with open('dict.txt', 'r') as f:
+with open(data_path + 'dict.txt', 'r') as f:
     dic = f.read().split('\n')
 
 dic_arr = np.array(dic)

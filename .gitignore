@@ -4,3 +4,4 @@ comment_new/*
 .vscode/*
 *.pk1
 *.pyc
+data/*

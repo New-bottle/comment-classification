@@ -13,7 +13,7 @@ import csv
 ]
 '''
 def get_training_set(filename):
-    filepath = './comment_new/'
+    filepath = '../comment_new/'
     ans = []
     with open(filename, 'rb') as csvfile:
         csv_reader = csv.DictReader(csvfile)
