@@ -13,8 +13,9 @@ for i in range(5000,6000):
         seg_list = jieba.lcut(content.strip(), cut_all=False)
         bag.extend(seg_list)
 # get word bag for every comment
-punctuation = [",", ":", ";", ".", "'", '"', "?", "/", "-", "+", "&", "(", ")", "*",
-"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", " "]
+with open('../data/remove.txt', 'r') as f:
+    punctuation = f.read().split('\n')
+
 cleanbag = []              
 for token in bag:
     for punc in punctuation:
@@ -27,14 +28,19 @@ for token in bag:
 dic = list(set(cleanbag))
 
 
+
+counts = pd.Series(cleanbag).value_counts()
 # get the union-set
 with open(data_path + 'dict.txt', 'w') as f:
-    for eachword in dic:
-        f.writelines(eachword.encode('utf8')+'\n')
+    for index, each in enumerate(counts):
+        if each > 2:
+            print >>f, str(counts.index[index])
+    # print >>f, str(list(counts)).decode('utf-8')
+    # for eachword in dic:
+    #     f.writelines(eachword.encode('utf8')+'\n')
     f.close()
 
 pd.set_option('display.max_rows', None)
-print (pd.Series(cleanbag).value_counts())
 with open(data_path + 'dict_count.txt', 'w') as f:
-    print >>f, str(pd.Series(cleanbag).value_counts())
+    print >>f, str(counts)
     f.close()
