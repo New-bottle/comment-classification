@@ -1,5 +1,8 @@
 from readin import *
 from parse import *
+from sklearn import feature_extraction
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
 data_path = '../data/'
@@ -9,27 +12,36 @@ train_vec = data_path + 'training_vec.pk1'
 data_set = get_training_set(train_ori)
 data_set = parse_data(data_set)
 
-with open(data_path + 'dict.txt', 'r') as f:
-    dic = f.read().split('\n')
+corpus = []
+for item in data_set:
+    corpus.append(" ".join(item[0]))
+vectorizer = CountVectorizer()
+transformer = TfidfTransformer()
+tfidf = transformer.fit_transform(vectorizer.fit_transform(corpus)).toarray()
 
-dic_arr = np.array(dic)
-dic_set = set(dic)
-dic_rev = dict()
-for index, each in enumerate(dic):
-    dic_rev[each] = index
+print tfidf
+print('111')
 
+def get_vec(data_set):
+    vec_list = []
+    label_list = []
+    for i, each in enumerate(data_set):
+        label_list.append(each[1])
+        this_vec = transformer.transform(vectorizer.transform([" ".join(data_set[i][0])])).toarray()
+        vec_list.extend(this_vec)
+    return vec_list, label_list
 
-vec_list = []
-label_list = []
-for each in data_set:
-    label_list.append(each[1])
-    this_vec = np.zeros(dic_arr.shape[0])
-    for token in each[0]:
-        if dic_rev.has_key(token.encode('utf-8')):
-            this_vec[dic_rev[token.encode('utf-8')]] = 1
-    vec_list.append(this_vec)
+vec_list, label_list = get_vec(data_set)
 
 with open(train_vec, 'wb') as f:
     pickle.dump(vec_list, f)
     pickle.dump(label_list, f)
+    f.close()
+
+test_set = get_training_set(data_path + 'example.csv')
+test_set = parse_data(test_set)
+vec_list, label_list = get_vec(test_set)
+
+with open(data_path + 'test_vec.pk1', 'wb') as f:
+    pickle.dump(vec_list, f)
     f.close()

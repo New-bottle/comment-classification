@@ -33,7 +33,7 @@ counts = pd.Series(cleanbag).value_counts()
 # get the union-set
 with open(data_path + 'dict.txt', 'w') as f:
     for index, each in enumerate(counts):
-        if each > 2:
+        if each > 0:
             print >>f, str(counts.index[index])
     # print >>f, str(list(counts)).decode('utf-8')
     # for eachword in dic:
