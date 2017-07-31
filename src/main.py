@@ -46,6 +46,7 @@ def main(c_val, gamma_v):
     ans_clf = svm.SVC(kernel='rbf', gamma=gamma_v, probability=True, C = c_val)
     ans_accuracy = 1.0
     cross_size = len(X) / cross_k
+    total_acc = 0.0
     for i in range(cross_k):
         indices = range(len(X))
         X_cross = [X[j] for j in indices if j % cross_k == i]
@@ -70,20 +71,23 @@ def main(c_val, gamma_v):
         # print(y_cross)
         # print(y_)
         print(accuracy / cross_size)
-        if (accuracy < ans_accuracy):
-            ans_accuracy = accuracy
-            ans_clf = clf
+        ans_accuracy = accuracy / cross_size
+        total_acc += ans_accuracy
+        # if (accuracy < ans_accuracy):
+        #     ans_accuracy = accuracy
+        #     ans_clf = clf
         #   test_auc = metrics.roc_auc_score(y_cross, y_)
         #   print test_auc
         #   print metrics.roc_auc_score(y_cross, y_)
     global best_acc
     global best_c, best_gamma
-    if ans_accuracy > best_acc:
-        best_acc = ans_accuracy
-        best_clf = ans_clf
-for c_val in range(1, 10):       
-    for gamma_v in range(1, 100, 5):
-        main(c_val, gamma_v / 100.0)
+    if total_acc > best_acc:
+        best_acc = total_acc
+        best_c = c_val
+        best_gamma = gamma_v
+for c_val in range(10, 21, 2):       
+    for gamma_v in range(1, 101, 5):
+        main(c_val / 10.0, gamma_v / 100.0)
 
 print 'best_c =', best_c
 print 'best_gamma =', best_gamma
