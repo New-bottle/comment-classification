@@ -27,7 +27,8 @@ if do_PCA:
     X_test = pca.transform(X_test)
     print 'pca fit end'
 
-best_clf = svm.SVC()
+best_c = 0.0
+best_gamma = 0.0
 best_acc = 0.0
 
 def main(c_val, gamma_v):
@@ -43,7 +44,7 @@ def main(c_val, gamma_v):
 
 
     ans_clf = svm.SVC(kernel='rbf', gamma=gamma_v, probability=True, C = c_val)
-    ans_accuracy = 0.0
+    ans_accuracy = 1.0
     cross_size = len(X) / cross_k
     for i in range(cross_k):
         indices = range(len(X))
@@ -69,14 +70,14 @@ def main(c_val, gamma_v):
         # print(y_cross)
         # print(y_)
         print(accuracy / cross_size)
-        if (accuracy > ans_accuracy):
+        if (accuracy < ans_accuracy):
             ans_accuracy = accuracy
             ans_clf = clf
         #   test_auc = metrics.roc_auc_score(y_cross, y_)
         #   print test_auc
         #   print metrics.roc_auc_score(y_cross, y_)
     global best_acc
-    global best_clf
+    global best_c, best_gamma
     if ans_accuracy > best_acc:
         best_acc = ans_accuracy
         best_clf = ans_clf
@@ -84,6 +85,11 @@ for c_val in range(1, 10):
     for gamma_v in range(1, 100, 5):
         main(c_val, gamma_v / 100.0)
 
+print 'best_c =', best_c
+print 'best_gamma =', best_gamma
+print 'best_accuracy =', best_acc
+best_clf = svm.SVC(kernel='rbf', gamma=best_gamma, probability=True, C = best_c)
+best_clf.fit(X, y)
 y_test = best_clf.predict_proba(X_test)[:,1]
 with open('../data/ans.txt', 'w') as f:
     for each in y_test:
