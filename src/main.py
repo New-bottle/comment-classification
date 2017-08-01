@@ -19,7 +19,7 @@ with open(test_file, 'rb') as f:
     X_test = pickle.load(f)
     f.close()
 if do_PCA:
-    components = 400
+    components = 5800
     print 'components = ', components 
     pca = PCA(n_components=components)
     print 'fitting pca'
@@ -85,8 +85,8 @@ def main(c_val, gamma_v):
         best_acc = total_acc
         best_c = c_val
         best_gamma = gamma_v
-for c_val in range(10, 21, 2):       
-    for gamma_v in range(1, 101, 5):
+for c_val in range(1, 30, 1):       
+    for gamma_v in range(8, 121, 2):
         main(c_val / 10.0, gamma_v / 100.0)
 
 print 'best_c =', best_c
