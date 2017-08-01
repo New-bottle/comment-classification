@@ -7,17 +7,18 @@ import pickle
 
 train_file = '../data/training_vec.pk1'
 test_file = '../data/test_vec.pk1'
+pca_file = '../data/pca_vec.pk1'
 cross_size = 0
 do_PCA = True
 cross_k = 5
 
 with open(train_file, 'rb') as f:
-    X = pickle.load(f)
+    if do_PCA == True:
+        X = pickle.load(f)
     y = pickle.load(f)
-    f.close()
 with open(test_file, 'rb') as f:
-    X_test = pickle.load(f)
-    f.close()
+    if do_PCA == True:
+        X_test = pickle.load(f)
 if do_PCA:
     components = 5800
     print 'components = ', components 
@@ -26,6 +27,13 @@ if do_PCA:
     X = pca.fit_transform(X)
     X_test = pca.transform(X_test)
     print 'pca fit end'
+    with open(pca_file, 'wb') as f:
+        pickle.dump(X, f)
+        pickle.dump(X_test, f)
+else:
+    with open(pca_file, 'rb') as f:
+        X = pickle.load(f)
+        X_test = pickle.load(f)
 
 best_c = 0.0
 best_gamma = 0.0
@@ -85,7 +93,7 @@ def main(c_val, gamma_v):
         best_acc = total_acc
         best_c = c_val
         best_gamma = gamma_v
-for c_val in range(1, 30, 1):       
+for c_val in range(8, 30, 1):       
     for gamma_v in range(8, 121, 2):
         main(c_val / 10.0, gamma_v / 100.0)
 
